@@ -1,8 +1,12 @@
 const express = require('express')
-const User = require('../models/user')
 const auth = require ('../middleware/auth')
 
 const router = new express.Router()
+
+//Import models
+const User = require('../models/user')
+const Patient = require('../models/patient')
+const { findById } = require('../models/user')
 
 router.post('/users', async (req, res) => {
     const user = new User(req.body)
@@ -52,7 +56,7 @@ router.post('/users/logoutAll', auth, async (req, res) => {
 
 router.get('/users/me', auth, async (req, res) => {
     try {
-        const user = await req.user
+        const user = req.user
         res.send(user.getPublicProfile())
     } catch (e) {
         res.status(500).send()
@@ -86,5 +90,40 @@ router.delete('/users/me', auth, async (req, res) => {
         res.status(500).send({error: error})
     }
 })
+
+// Create new patient data
+router.post('/users/me/addPatient', auth, async (req, res) => {
+    const user = req.user
+    const patient = new Patient(req.body)
+    try {
+        patient.owners.push(user._id)
+        await patient.save()
+        res.send(patient)
+    } catch (error) {
+        res.status(500).send({error: error})
+    }
+})
+// Read patient list
+
+// Update patient data
+router.patch('/users/me/updatePatient/:id', auth, async (req, res) => {
+    const user = req.user
+    const _id = req.params.id //Patient ID
+    const patient = await Patient.findById(_id)
+    // Check if user is patient's owner
+    const isValidPatient = patient.owners.includes(user._id)
+    if (!isValidPatient){
+        return res.status(404).send({error: 'Invalid patient!'})
+    }
+    const updates = Object.keys(req.body)
+    try {
+        updates.forEach( (update) => patient[update] = req.body[update])
+        await patient.save()
+        res.send(patient)
+    } catch (error) {
+        res.status(500).send({error: error})
+    }
+})
+// Delete patient data
 
 module.exports = router

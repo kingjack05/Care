@@ -1,5 +1,19 @@
 const mongoose = require('mongoose')
 
+const noteSchema = new mongoose.Schema({
+    title: {
+        type: String
+    }, 
+    archived: {
+        type: Boolean,
+        required: true,
+        default: false        
+    }
+}, 
+{
+    timestamps: true
+})
+
 const patientSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -23,10 +37,24 @@ const patientSchema = new mongoose.Schema({
         type: Boolean
     },
     shortSummary: {
-        type: String
+        type: String,
+        maxLength: 75 //Restrict length for mobile rendering
     },
     presentDiagnosis: {
-        type: [mongoose.Schema.Types.ObjectId]
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Diagnosis'
+    },
+    notes: {
+        type: [noteSchema],
+    },
+    owners: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'User',
+        required: true
+    },
+    canView: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'User'
     }
 })
 

@@ -1,5 +1,8 @@
 const express = require('express')
+//Run connection
 require('./db/mongoose')
+//Run script
+// require('./scripts/write')
 
 const userRouter = require('./routes/user.js')
 

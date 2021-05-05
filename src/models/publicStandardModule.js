@@ -8,6 +8,12 @@ const rowSchema = new mongoose.Schema({
     },
     tip: {
         type: String
+    }, 
+    on: {
+        type: Date
+    },
+    since: {
+        type: Date
     }
 })
 
@@ -49,6 +55,12 @@ const publicStandardModuleSchema = new mongoose.Schema({
     votingScore: {
         type: Number,
         default: 0
+    },
+    exportToAdmissionNote: {
+        type: String
+    },
+    exportToSOAP: {
+        type: String
     }
 },{ //Options
     timestamps: true
