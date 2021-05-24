@@ -1,25 +1,25 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
 
 // Import model
-const Datapoint = require('../models/datapoint')
+const Datapoint = require("../models/datapoint")
 // Import data
-const datapointData = require('../data/datapointData')
+const datapointData = require("../data/datapointData")
 
-async function write(data) {
-    data.forEach(async element => {
+async function writedatapointData(data) {
+    data.forEach(async (element) => {
         const obj = await Datapoint.findOne({ name: element.name })
-        if (!obj) { //Write new object
+        if (!obj) {
+            //Save new object
             try {
                 const newObject = new Datapoint(element)
                 await newObject.save()
-                console.log('New object created!')
             } catch (error) {
                 console.log(error)
             }
-        } else {    //Replace object
+        } else {
+            //Replace object
             try {
                 await obj.replaceOne(element)
-                console.log('Object Updated!')
             } catch (error) {
                 console.log(error)
             }
@@ -27,4 +27,4 @@ async function write(data) {
     })
 }
 
-write(datapointData)
+writedatapointData(datapointData)

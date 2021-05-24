@@ -18,13 +18,16 @@ const rowSchema = new mongoose.Schema({
 })
 
 const standardBlockSchema = new mongoose.Schema({
+    title: {
+        type: String
+    },    
     content:{
         type: [rowSchema]
     },
-    title: {
+    tip: {
         type: String
     },
-    tip: {
+    text: {
         type: String
     }
 })
