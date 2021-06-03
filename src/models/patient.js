@@ -1,14 +1,33 @@
 const mongoose = require("mongoose")
 
-const noteSchema = new mongoose.Schema(
+const familyHistorySchema = new mongoose.Schema({
+    familyMember: {
+        type: String,
+    },
+    diagnosis: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Diagnosis",
+    },
+})
+const historySchema = new mongoose.Schema({
+    riskFactors: {
+        type: [String],
+    },
+    familyHistory: {
+        type: [familyHistorySchema],
+    },
+    surgicalHistory: {},
+    lifestyle: {
+        type: [String],
+    },
+})
+const pastEncounterSchema = new mongoose.Schema(
     {
-        title: {
+        shortSummary: {
             type: String,
         },
-        archived: {
-            type: Boolean,
-            required: true,
-            default: false,
+        detailedSummary: {
+            type: String,
         },
     },
     {
@@ -26,12 +45,6 @@ const patientSchema = new mongoose.Schema({
         required: true,
         default: false,
     },
-    admittedDate: {
-        type: Date,
-    },
-    primaryCaretaker: {
-        type: String,
-    },
     age: {
         type: Number,
     },
@@ -45,8 +58,22 @@ const patientSchema = new mongoose.Schema({
     presentDiagnosis: {
         type: [String],
     },
+    allergies: {
+        type: [String],
+    },
+    medications: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Drug",
+    },
+    history: {
+        type: historySchema,
+    },
     notes: {
-        type: [noteSchema],
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Note",
+    },
+    pastEncounters: {
+        type: [pastEncounterSchema],
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,

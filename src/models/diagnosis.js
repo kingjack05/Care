@@ -22,6 +22,9 @@ const diagnosisSchema = new mongoose.Schema(
             ref: "PublicStandardModule",
         },
         recommendedPublicDecisionTreeModules: {},
+        SCTID: {
+            type: String,
+        },
     },
     {
         timestamps: true,

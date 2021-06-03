@@ -4,7 +4,7 @@ const cors = require("cors")
 require("./db/mongoose")
 // Run script to...
 // Update data
-// require('./scripts/writedatapointData')
+// require("./scripts/writedatapointData")
 
 //import routes
 const userRouter = require("./routes/user.js")
@@ -14,7 +14,9 @@ const app = express()
 const port = process.env.PORT || 3001
 
 //Use CORS middleware (dev only)
-app.use(cors())
+if (port == 3001) {
+    app.use(cors())
+}
 
 app.use(express.json())
 app.use(userRouter)
