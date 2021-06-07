@@ -24,10 +24,7 @@ router.post("/users", async (req, res) => {
 
 router.post("/users/login", async (req, res) => {
     try {
-        const user = await User.findByCredentials(
-            req.body.email,
-            req.body.password
-        )
+        const user = await User.findByCredentials(req.body.email, req.body.password)
         const token = await user.generateAuthToken()
         res.send({ user: user.getPublicProfile(), token })
     } catch (error) {
@@ -71,9 +68,7 @@ router.get("/users/me", auth, async (req, res) => {
 router.patch("/users/me", auth, async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ["name", "email", "password"]
-    const isValidUpdate = updates.every((update) =>
-        allowedUpdates.includes(update)
-    )
+    const isValidUpdate = updates.every((update) => allowedUpdates.includes(update))
 
     if (!isValidUpdate) {
         return res.status(400).send({ error: "Invalid update!" })
@@ -140,14 +135,10 @@ router.get("/users/me/patients/:skip", auth, async (req, res) => {
     const user = req.user
     const skip = parseInt(req.params.skip, 10)
     const limit = 10
-    const patients = await Patient.find(
-        { owner: user._id },
-        "_id age sex presentDiagnosis shortSummary title",
-        {
-            skip,
-            limit,
-        }
-    )
+    const patients = await Patient.find({ owner: user._id }, "_id age sex presentDiagnosis shortSummary title", {
+        skip,
+        limit,
+    })
     try {
         res.send(patients)
     } catch (error) {

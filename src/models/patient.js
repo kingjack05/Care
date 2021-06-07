@@ -56,7 +56,8 @@ const patientSchema = new mongoose.Schema({
         maxLength: 75, //Restrict length for mobile rendering
     },
     presentDiagnosis: {
-        type: [String],
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Diagnosis",
     },
     allergies: {
         type: [String],

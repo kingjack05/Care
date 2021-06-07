@@ -7,18 +7,18 @@ require("./db/mongoose")
 // require("./scripts/writedatapointData")
 
 //import routes
+const moduleRouter = require("./routes/module")
 const userRouter = require("./routes/user.js")
 const searchRouter = require("./routes/search")
 
 const app = express()
 const port = process.env.PORT || 3001
 
-//Use CORS middleware (dev only)
-if (port == 3001) {
-    app.use(cors())
-}
+//Use CORS middleware
+app.use(cors())
 
 app.use(express.json())
+app.use(moduleRouter)
 app.use(userRouter)
 app.use(searchRouter)
 

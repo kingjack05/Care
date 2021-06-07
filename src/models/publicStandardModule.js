@@ -15,15 +15,6 @@ const rowSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Datapoint",
     },
-    tip: {
-        type: String,
-    },
-    on: {
-        type: Date,
-    },
-    since: {
-        type: Date,
-    },
 })
 
 const standardBlockSchema = new mongoose.Schema({
@@ -38,6 +29,16 @@ const standardBlockSchema = new mongoose.Schema({
     },
     text: {
         type: String,
+    },
+})
+
+const voteSchema = new mongoose.Schema({
+    vote: {
+        type: Boolean,
+    },
+    voter: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
     },
 })
 
@@ -85,9 +86,6 @@ const publicStandardModuleSchema = new mongoose.Schema(
 
 //Middleware
 
-const PublicStandardModule = mongoose.model(
-    "PublicModule",
-    publicStandardModuleSchema
-)
+const PublicStandardModule = mongoose.model("Public Standard Module", publicStandardModuleSchema)
 
 module.exports = PublicStandardModule
