@@ -24,10 +24,10 @@ const standardBlockSchema = new mongoose.Schema({
     content: {
         type: [rowSchema],
     },
-    tip: {
-        type: String,
+    customFields: {
+        type: [],
     },
-    text: {
+    tip: {
         type: String,
     },
 })

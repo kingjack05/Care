@@ -23,7 +23,9 @@ router.post("/users/me/createModule/PublicStandardModule", auth, async (req, res
 //Get module
 router.get("/publicStandardModule/:id", async (req, res) => {
     try {
-        const publicStandardModule = await PublicStandardModule.findById(req.params.id)
+        const publicStandardModule = await PublicStandardModule.findById(req.params.id).populate(
+            "content.content.field"
+        )
         if (!publicStandardModule) {
             throw new Error("Did not find module!")
         }
@@ -42,7 +44,23 @@ router.get("/users/me/PublicStandardModules", auth, async (req, res) => {
         res.status(500).send({ error: error })
     }
 })
-
+//Update module
+router.post("/users/me/module/:category/:id", auth, async (req, res) => {
+    const user = req.user
+    let response
+    switch (req.params.category) {
+        case "publicStandard":
+            response = await PublicStandardModule.findByIdAndUpdate(req.params.id)
+            try {
+                res.send(response)
+            } catch (error) {
+                res.status(500).send({ error: error })
+            }
+            break
+        default:
+            break
+    }
+})
 //Delete module
 router.delete("/users/me/module/:category/:id", auth, async (req, res) => {
     const user = req.user

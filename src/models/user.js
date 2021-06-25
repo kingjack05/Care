@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minlength: 7,
+        minlength: 8,
         trim: true,
         validate(value) {
             if (value.toLowerCase().includes("password")) {
@@ -39,6 +39,11 @@ const userSchema = new mongoose.Schema({
                 throw new Error("Age must be a postive number")
             }
         },
+    },
+    authorization: {
+        type: String,
+        enum: ["Administrator", "Contributor", "User"],
+        default: "User",
     },
     tokens: [
         {
@@ -86,20 +91,17 @@ userSchema.methods.getPublicProfile = function () {
     return userObject
 }
 //Hash password
-userSchema.pre(
-    ["save", "updateOne", "findOneAndUpdate", "findByIdAndUpdate"],
-    async function (next) {
-        //'save' works when document is created
-        const user = this
+userSchema.pre(["save", "updateOne", "findOneAndUpdate", "findByIdAndUpdate"], async function (next) {
+    //'save' works when document is created
+    const user = this
 
-        // console.log('Just before saving!')
-        if (user.isModified("password")) {
-            user.password = await bcrypt.hash(user.password, 8)
-        }
-
-        next()
+    // console.log('Just before saving!')
+    if (user.isModified("password")) {
+        user.password = await bcrypt.hash(user.password, 8)
     }
-)
+
+    next()
+})
 
 const User = mongoose.model("User", userSchema)
 

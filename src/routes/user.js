@@ -6,13 +6,25 @@ const router = new express.Router()
 //Import models
 const User = require("../models/user")
 const Patient = require("../models/patient")
-const { findById } = require("../models/user")
-const { request } = require("express")
+const Adminrightrequest = require("../models/adminrightrequest")
+
+//Request admin rights
+router.post("/users/requestAdmin/:right", auth, async (req, res) => {
+    const user = req.user
+    try {
+        const data = { user: user._id, requset: req.params.right }
+        const adminrightrequest = new Adminrightrequest(data)
+        await adminrightrequest.save()
+        res.status(201).send()
+    } catch (e) {
+        res.status(500).send(e)
+    }
+})
 
 //Authentication
 router.post("/users", async (req, res) => {
-    const user = new User(req.body)
-
+    const userData = (({ name, email, password }) => ({ name, email, password }))(req.body)
+    const user = new User(userData)
     try {
         await user.save()
         const token = await user.generateAuthToken()
@@ -135,10 +147,14 @@ router.get("/users/me/patients/:skip", auth, async (req, res) => {
     const user = req.user
     const skip = parseInt(req.params.skip, 10)
     const limit = 10
-    const patients = await Patient.find({ owner: user._id }, "_id age sex presentDiagnosis shortSummary title", {
-        skip,
-        limit,
-    })
+    const patients = await Patient.find(
+        { owner: user._id },
+        "_id age sex presentDiagnosis shortSummary title",
+        {
+            skip,
+            limit,
+        }
+    )
     try {
         res.send(patients)
     } catch (error) {

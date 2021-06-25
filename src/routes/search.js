@@ -3,6 +3,7 @@ const express = require("express")
 // Load models
 const Datapoint = require("../models/datapoint")
 const Diagnosis = require("../models/diagnosis")
+const Drug = require("../models/drug")
 
 const router = new express.Router()
 
@@ -95,16 +96,39 @@ router.get("/search/drug", async (req, res) => {
     }
 })
 
-module.exports = router
+// Details
+router.get("/datapoint/:id", async (req, res) => {
+    try {
+        const datapoint = await Datapoint.findById(req.params.id)
+        if (!datapoint) {
+            throw new Error("Did not find datapoint!")
+        }
+        return res.send(datapoint)
+    } catch (error) {
+        res.status(500).send({ error: error })
+    }
+})
+router.get("/diagnosis/:id", async (req, res) => {
+    try {
+        const diagnosis = await Diagnosis.findById(req.params.id)
+        if (!diagnosis) {
+            throw new Error("Did not find diagnosis!")
+        }
+        return res.send(diagnosis)
+    } catch (error) {
+        res.status(500).send({ error: error })
+    }
+})
+router.get("/drug/:id", async (req, res) => {
+    try {
+        const drug = await Drug.findById(req.params.id)
+        if (!drug) {
+            throw new Error("Did not find drug!")
+        }
+        return res.send(drug)
+    } catch (error) {
+        res.status(500).send({ error: error })
+    }
+})
 
-// router.get('/datapoint/:id', async (req, res) => {
-//     try {
-//         const datapoint = await Datapoint.findById(req.params.id)
-//         if (!datapoint) {
-//             throw new Error('Did not find datapoint!')
-//         }
-//         return res.send(datapoint)
-//     } catch (error) {
-//         res.status(500).send({error: error})
-//     }
-// })
+module.exports = router

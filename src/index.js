@@ -10,6 +10,7 @@ require("./db/mongoose")
 const moduleRouter = require("./routes/module")
 const userRouter = require("./routes/user.js")
 const searchRouter = require("./routes/search")
+const adminRouter = require("./routes/admin")
 
 const app = express()
 const port = process.env.PORT || 3001
@@ -21,6 +22,7 @@ app.use(express.json())
 app.use(moduleRouter)
 app.use(userRouter)
 app.use(searchRouter)
+app.use(adminRouter)
 
 app.listen(port, () => {
     console.log("Server is up on port " + port)
