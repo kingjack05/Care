@@ -1,5 +1,6 @@
 const express = require("express")
 const auth = require("../middleware/auth")
+const _ = require("lodash")
 
 const router = new express.Router()
 
@@ -46,14 +47,18 @@ router.get("/users/me/PublicStandardModules", auth, async (req, res) => {
 })
 //Update module
 router.post("/users/me/module/:category/:id", auth, async (req, res) => {
-    const user = req.user
-    let response
+    const allowedUpdates = ["exportsTo", "name", "content", "exports"]
     switch (req.params.category) {
-        case "publicStandard":
-            response = await PublicStandardModule.findByIdAndUpdate(req.params.id)
+        case "PublicStandard":
+            const filteredUpdates = _.pick(req.body, allowedUpdates)
+            const response = await PublicStandardModule.findByIdAndUpdate(
+                req.params.id,
+                filteredUpdates
+            )
             try {
-                res.send(response)
+                res.status(200).send(response)
             } catch (error) {
+                console.log(error)
                 res.status(500).send({ error: error })
             }
             break
@@ -63,11 +68,9 @@ router.post("/users/me/module/:category/:id", auth, async (req, res) => {
 })
 //Delete module
 router.delete("/users/me/module/:category/:id", auth, async (req, res) => {
-    const user = req.user
-    let response
     switch (req.params.category) {
-        case "publicStandard":
-            response = await PublicStandardModule.findByIdAndDelete(req.params.id)
+        case "PublicStandard":
+            const response = await PublicStandardModule.findByIdAndDelete(req.params.id)
             try {
                 res.send(response)
             } catch (error) {

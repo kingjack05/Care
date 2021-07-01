@@ -49,7 +49,7 @@ const patientSchema = new mongoose.Schema({
         type: Number,
     },
     sex: {
-        type: Boolean,
+        type: String,
     },
     shortSummary: {
         type: String,
@@ -84,10 +84,12 @@ const patientSchema = new mongoose.Schema({
     canEdit: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: "User",
+        default: [],
     },
     canView: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: "User",
+        default: [],
     },
 })
 

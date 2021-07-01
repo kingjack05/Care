@@ -1,9 +1,15 @@
 const mongoose = require("mongoose")
 
-const workupSchema = new mongoose.Schema({
-    module: { type: [mongoose.Schema.Types.ObjectId] },
-    category: { type: String, enum: ["Standard", "Decision tree"] },
-})
+const workupSchema = new mongoose.Schema(
+    {
+        module: { type: mongoose.Schema.Types.ObjectId },
+        moduleName: { type: String },
+        publicOrNot: { type: Boolean },
+        category: { type: String, enum: ["Standard", "Decision tree"] },
+        values: {},
+    },
+    { timestamps: true }
+)
 
 const noteSchema = new mongoose.Schema(
     {
@@ -17,14 +23,10 @@ const noteSchema = new mongoose.Schema(
         },
         encounterType: {
             type: String,
-            enum: [
-                "Ambulatory",
-                "Emergency",
-                "Home health",
-                "Inpatient",
-                "Outpatient",
-                "Virtual",
-            ],
+            enum: ["Ambulatory", "Emergency", "Home health", "Inpatient", "Outpatient", "Virtual"],
+        },
+        shortSummary: {
+            type: String,
         },
         admittedDate: {
             type: Date,
@@ -34,6 +36,14 @@ const noteSchema = new mongoose.Schema(
         },
         workups: {
             type: [workupSchema],
+        },
+        owner: {
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: "User",
+        },
+        patient: {
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: "Patient",
         },
     },
     {

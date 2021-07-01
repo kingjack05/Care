@@ -4,6 +4,7 @@ const express = require("express")
 const Datapoint = require("../models/datapoint")
 const Diagnosis = require("../models/diagnosis")
 const Drug = require("../models/drug")
+const PublicStandardModule = require("../models/publicStandardModule")
 
 const router = new express.Router()
 
@@ -128,6 +129,27 @@ router.get("/drug/:id", async (req, res) => {
         return res.send(drug)
     } catch (error) {
         res.status(500).send({ error: error })
+    }
+})
+
+//Search public module
+router.get("/search/modules", async (req, res) => {
+    try {
+        const category = req.query.category
+        const searchTerm = req.query.searchTerm
+        switch (category) {
+            case "Standard":
+                const response = await PublicStandardModule.find(
+                    { $text: { $search: searchTerm } },
+                    "name _id"
+                )
+                return res.status(200).send(response)
+            default:
+                return res.send("Wrong parameters!")
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send(error)
     }
 })
 

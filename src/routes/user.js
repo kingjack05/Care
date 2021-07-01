@@ -208,9 +208,9 @@ router.delete("/users/me/patient/:id", auth, async (req, res) => {
     }
     try {
         await Patient.findByIdAndDelete(_id)
-        res.send("Successful deletion!")
+        return res.send("Successful deletion!")
     } catch (error) {
-        res.status(500).send({ error: error })
+        return res.status(500).send({ error: error })
     }
 })
 //TODO: Share patient

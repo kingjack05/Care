@@ -84,6 +84,9 @@ const publicStandardModuleSchema = new mongoose.Schema(
     }
 )
 
+//Index
+publicStandardModuleSchema.index({ name: "text" })
+
 //Middleware
 
 const PublicStandardModule = mongoose.model("Public Standard Module", publicStandardModuleSchema)
